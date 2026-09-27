@@ -8,7 +8,6 @@
 <link rel="icon" type="image/png" href="https://www.dropbox.com/scl/fi/9wud3i77raw9yjjizztmh/LOGO_MASTER_LEAGUE_FC26.png?rlkey=1tswb6umelsh1iwofn45gfq0x&st=gfznv0b1&dl=1">
 
 <style>
-  :root { color-scheme: light; }
   * { box-sizing: border-box; }
 
   html, body {
@@ -18,7 +17,6 @@
     width: 100%;
     overflow: hidden;
     background: #ffffff;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   }
 
   #app {
@@ -37,80 +35,7 @@
     height: 100%;
     border: none;
     background: #ffffff;
-    opacity: 0;
-    transition: opacity .35s ease;
   }
-  iframe.is-loaded { opacity: 1; }
-
-  /* Overlay loading */
-  #loading {
-    position: fixed;
-    inset: 0;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    background: #ffffff;
-    transition: opacity .3s ease;
-  }
-  #loading.is-hidden { opacity: 0; pointer-events: none; }
-
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #e5e7eb;
-    border-top-color: #2563eb;
-    border-radius: 50%;
-    animation: spin .8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  #loading p {
-    margin: 0;
-    color: #6b7280;
-    font-size: 14px;
-  }
-
-  /* Fallback kalau load kelamaan / gagal */
-  #fallback {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 11;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    background: #ffffff;
-    text-align: center;
-    padding: 24px;
-  }
-  #fallback.is-visible { display: flex; }
-
-  #fallback p {
-    margin: 0;
-    color: #374151;
-    font-size: 15px;
-    max-width: 320px;
-    line-height: 1.5;
-  }
-
-  .fallback-actions { display: flex; gap: 10px; }
-
-  .btn {
-    display: inline-block;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 14px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-  }
-  .btn-primary { background: #2563eb; color: #ffffff; }
-  .btn-secondary { background: #f3f4f6; color: #111827; }
 </style>
 </head>
 <body>
@@ -125,58 +50,6 @@
     referrerpolicy="no-referrer-when-downgrade">
   </iframe>
 </div>
-
-<div id="loading">
-  <div class="spinner"></div>
-  <p>Memuat Master League MKKS...</p>
-</div>
-
-<div id="fallback">
-  <p>Halaman terasa lama dimuat. Ini biasanya karena koneksi lambat atau server Google Apps Script sedang sibuk.</p>
-  <div class="fallback-actions">
-    <button id="retryBtn" class="btn btn-primary">Muat Ulang</button>
-    <a id="openDirect" class="btn btn-secondary" href="https://script.google.com/macros/s/AKfycbxRDE3feqs8Zv03NRdRouQonGEUxpH3M3zH1ibcvptfsgokRSOndxYfALG4PvTasTlqpw/exec" target="_blank" rel="noopener">Buka Tab Baru</a>
-  </div>
-</div>
-
-<script>
-(function () {
-  var frame = document.getElementById('mlFrame');
-  var loading = document.getElementById('loading');
-  var fallback = document.getElementById('fallback');
-  var retryBtn = document.getElementById('retryBtn');
-  var timeoutId;
-  var TIMEOUT_MS = 12000; // 12 detik sebelum menampilkan opsi fallback
-
-  function startTimeout() {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(function () {
-      if (!frame.classList.contains('is-loaded')) {
-        fallback.classList.add('is-visible');
-      }
-    }, TIMEOUT_MS);
-  }
-
-  frame.addEventListener('load', function () {
-    clearTimeout(timeoutId);
-    frame.classList.add('is-loaded');
-    loading.classList.add('is-hidden');
-    fallback.classList.remove('is-visible');
-    setTimeout(function () { loading.style.display = 'none'; }, 350);
-  });
-
-  retryBtn.addEventListener('click', function () {
-    fallback.classList.remove('is-visible');
-    loading.style.display = 'flex';
-    loading.classList.remove('is-hidden');
-    frame.classList.remove('is-loaded');
-    frame.src = frame.src; // reload iframe
-    startTimeout();
-  });
-
-  startTimeout();
-})();
-</script>
 
 </body>
 </html>
